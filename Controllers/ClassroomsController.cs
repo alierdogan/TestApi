@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TestApi.Controllers
 {
@@ -8,10 +9,10 @@ namespace TestApi.Controllers
     [ApiController]
     public class ClassroomsController : ControllerBase
     {
-        [HttpGet]
-        public IEnumerable<Classroom> Get()
+        List<Classroom> Classrooms;
+        public ClassroomsController()
         {
-            return new List<Classroom>() {
+            Classrooms = new List<Classroom>() {
                 new Classroom(){
                     Code=1,
                     Name="1A",
@@ -63,6 +64,20 @@ namespace TestApi.Controllers
                     SchoolCode=2
                 }
             };
+        }
+        [HttpGet]
+        public IEnumerable<Classroom> Get()
+        {
+            return Classrooms;
+        }
+
+
+
+        [HttpGet]
+        [Route("[action]/{code:int}")]
+        public Classroom GetClassroomByTeacherCode(int code)
+        {
+            return Classrooms.Where(f => f.Code == code).FirstOrDefault();
         }
     }
 }
