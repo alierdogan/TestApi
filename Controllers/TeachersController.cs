@@ -85,7 +85,7 @@ namespace TestApi.Controllers
             List< Teacher> teachers = Teachers.ToList();
             return new Result()
             {
-                Data = (teachers != null) ? Teachers : null,
+                Data = teachers ?? null,
                 Status = (teachers != null) ? "OK" : "",
                 Error = (teachers != null) ? "" : "Kayıt bulunamadı"
             };
