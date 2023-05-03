@@ -9,7 +9,7 @@ namespace TestApi.Controllers
     [ApiController]
     public class TeachersController : ControllerBase
     {
-        List<Teacher> Teachers;
+        readonly List<Teacher> Teachers;
         public TeachersController()
         {
             Teachers = new List<Teacher>() {
@@ -80,30 +80,28 @@ namespace TestApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Teacher> Get()
+        public Result Get()
         {
-            return Teachers;
+            List< Teacher> teachers = Teachers.ToList();
+            return new Result()
+            {
+                Data = (teachers != null) ? Teachers : null,
+                Status = (teachers != null) ? "OK" : "",
+                Error = (teachers != null) ? "" : "Kayıt bulunamadı"
+            };
         }
 
         [HttpGet]
         [Route("[action]/{code:int}")]
-        public Result<Teacher> GetByCode(int code)
+        public Result GetByCode(int code)
         {
             Teacher teacher = Teachers.Where(f => f.Code == code).FirstOrDefault();
-            Result<Teacher> data = new Result<Teacher>();
-            if (teacher != null)
+            return new Result()
             {
-                data.Data = teacher;
-                data.Status = "OK";
-                data.Error = "";
-            }
-            else
-            {
-                data.Status = "";
-                data.Error = "Kayıt bulunamadı";
-                data.Data = null;
-            }
-            return data;
+                Data = teacher ?? null,
+                Status = (teacher != null) ? "OK" : "",
+                Error = (teacher != null) ? "" : "Kayıt bulunamadı"
+            };
         }
     }
 }
