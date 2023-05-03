@@ -87,9 +87,23 @@ namespace TestApi.Controllers
 
         [HttpGet]
         [Route("[action]/{code:int}")]
-        public Teacher GetByCode(int code)
+        public Result<Teacher> GetByCode(int code)
         {
-            return Teachers.Where(f => f.Code == code).FirstOrDefault();
+            Teacher teacher = Teachers.Where(f => f.Code == code).FirstOrDefault();
+            Result<Teacher> data = new Result<Teacher>();
+            if (teacher != null)
+            {
+                data.Data = teacher;
+                data.Status = "OK";
+                data.Error = "";
+            }
+            else
+            {
+                data.Status = "";
+                data.Error = "Kayıt bulunamadı";
+                data.Data = null;
+            }
+            return data;
         }
     }
 }
